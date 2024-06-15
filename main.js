@@ -18,27 +18,20 @@ form.onsubmit = async (ev) => {
   output.textContent = 'Generating...';
 
   try {
-    // Load the image as a base64 string
-    let imageUrl = form.elements.namedItem('chosen-image').value;
-    let imageBase64 = await fetch(imageUrl)
-      .then(r => r.arrayBuffer())
-      .then(a => Base64.fromByteArray(new Uint8Array(a)));
-
     // Assemble the prompt by combining the text with the chosen image
     let contents = [
       {
         role: 'user',
         parts: [
-          { inline_data: { mime_type: 'image/jpeg', data: imageBase64, } },
           { text: promptInput.value }
         ]
       }
     ];
 
-    // Call the gemini-pro-vision model, and get a stream of results
+    // Call the gemini-pro model, and get a stream of results
     const genAI = new GoogleGenerativeAI(API_KEY);
     const model = genAI.getGenerativeModel({
-      model: "gemini-pro-vision",
+      model: "gemini-pro",
       safetySettings: [
         {
           category: HarmCategory.HARM_CATEGORY_HARASSMENT,
